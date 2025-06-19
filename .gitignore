@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.pyc
+
+# Django
+db.sqlite3
+*.log
+
+# Environment
+.env
+.venv/
+venv/
+.env.*
+
+# VS Code & Codespaces
+.vscode/
+*.code-workspace
+*.devcontainer/
+.devcontainer.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Migrations (optional: keep if versioning DB schema)
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Node (if using npm for frontend in project root)
+node_modules/
+
+# Static/media (if built locally)
+staticfiles/
+media/
