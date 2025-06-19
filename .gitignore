@@ -34,3 +34,4 @@ node_modules/
 # Static/media (if built locally)
 staticfiles/
 media/
+db.json

@@ -10,13 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+
+import psycopg2
+from decouple import Csv, config
 from dotenv import load_dotenv
-from decouple import config, Csv
 
 load_dotenv()
-
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,10 +34,9 @@ SECRET_KEY = "django-insecure-sn7t_c67j!t38hgfwxh+r(mtgn^$s6=335aol$pnbj!$v$^kv#
 DEBUG = True
 
 ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", cast=Csv())
-CORS_ALLOWED_ORIGINS = [
-    config("CORS_ALLOWED_ORIGIN")
-]
+CORS_ALLOWED_ORIGINS = [config("CORS_ALLOWED_ORIGIN")]
 
+AUTH_USER_MODEL = "auths.CustomUser"
 
 # Application definition
 
@@ -47,14 +47,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'corsheaders',
-    'rest_framework',
-    'drf_yasg',
-    'main', 
+    "corsheaders",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "drf_yasg",
+    "main",
+    "auths",
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -82,9 +84,32 @@ TEMPLATES = [
 ]
 
 DEFAULT_AUTHENTICATION_CLASSES = [
-    'rest_framework.authentication.TokenAuthentication',
+    "rest_framework.authentication.TokenAuthentication",
 ]
 
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Token": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token-based auth. Use 'Token <token>' (e.g. 'Token abcd1234')",
+        }
+    },
+}
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "auths.throttles.OTPThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "otp": "5/min",
+    },
+}
 
 WSGI_APPLICATION = "toolnest_backend.wsgi.application"
 
@@ -92,27 +117,24 @@ WSGI_APPLICATION = "toolnest_backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-USE_SQLITE = os.getenv("USE_SQLITE", "True") == "True"
+USE_SQLITE = config("USE_SQLITE", cast=bool, default=False)
 
 if USE_SQLITE:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 else:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('DB_NAME'),
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': os.getenv('DB_PORT', '3306'),
-            'OPTIONS': {
-                'ssl': {'ssl-ca': '/etc/ssl/certs/ca-certificates.crt'}
-            }
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("DB_NAME"),
+            "USER": config("DB_USER"),
+            "PASSWORD": config("DB_PASSWORD"),
+            "HOST": config("DB_HOST"),
+            "PORT": config("DB_PORT", cast=int),
         }
     }
 
@@ -156,4 +178,14 @@ STATIC_URL = "static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT", cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
