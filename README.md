@@ -78,8 +78,8 @@ ToolNest/
 
 Once running, access:
 
-* Swagger: `http://localhost:8000/v1/docs/`
-* Redoc: `http://localhost:8000/v1/redoc/`
+* Swagger: `{BASE URL}/v1/docs/`
+* Redoc: `{BASE URL}/v1/redoc/`
 
 ---
 
