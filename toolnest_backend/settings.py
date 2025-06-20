@@ -118,6 +118,7 @@ REST_FRAMEWORK = {
 
 WSGI_APPLICATION = "toolnest_backend.wsgi.application"
 
+SWAGGER_USE_COMPAT_RENDERERS = False
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
