@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "main",
     "auths",
+    "task_manager",
 ]
 
 MIDDLEWARE = [
@@ -109,6 +110,10 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "otp": "5/min",
     },
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_FILTER_BACKENDS": ["rest_framework.filters.OrderingFilter"],
+    "ORDERING_PARAM": "ordering",
 }
 
 WSGI_APPLICATION = "toolnest_backend.wsgi.application"
