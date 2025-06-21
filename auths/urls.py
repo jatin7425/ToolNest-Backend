@@ -1,5 +1,4 @@
 from django.urls import path
-
 from .views import LoginView, SendOTPView, SignupView, VerifyOTPView
 
 app_name = "auths"

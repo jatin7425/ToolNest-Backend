@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "main",
     "auths",
+    "task_manager",
 ]
 
 MIDDLEWARE = [
@@ -109,10 +110,15 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "otp": "5/min",
     },
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_FILTER_BACKENDS": ["rest_framework.filters.OrderingFilter"],
+    "ORDERING_PARAM": "ordering",
 }
 
 WSGI_APPLICATION = "toolnest_backend.wsgi.application"
 
+SWAGGER_USE_COMPAT_RENDERERS = False
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -189,3 +195,7 @@ EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"

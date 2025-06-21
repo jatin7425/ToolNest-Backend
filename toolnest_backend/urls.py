@@ -29,6 +29,7 @@ urlpatterns = [
     # Entry-point routes (/, /health/)
     path("", include("main.urls")),
     path("auths/", include("auths.urls", namespace="auths")),
+    path("tasks_manager/", include("task_manager.urls", namespace="task_manager")),
 ]
 
 if settings.DEBUG:
