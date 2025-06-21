@@ -92,3 +92,4 @@ services:
   - type: redis
     name: toolnest-redis
     plan: free
+    ipAllowList: []
