@@ -1,0 +1,94 @@
+services:
+  - type: web
+    name: toolnest-backend
+    env: python
+    plan: free
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+    startCommand: gunicorn toolnest_backend.wsgi:application --log-file -
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: USE_SQLITE
+        value: "False"
+      - key: DB_NAME
+        value: "postgres"
+      - key: DB_USER
+        value: "postgres.utxduutcqrkqfxwgsxpk"
+      - key: DB_PASSWORD
+        value: "Jatin#7525"
+      - key: DB_HOST
+        value: "aws-0-ap-south-1.pooler.supabase.com"
+      - key: DB_PORT
+        value: "6543"
+      - key: PUBLIC_SWAGGER_URL
+        value: "https://potential-guacamole-9pqg56j5jw439x9j-8000.app.github.dev"
+      - key: CORS_ALLOWED_ORIGIN
+        value: "https://potential-guacamole-9pqg56j5jw439x9j-8000.app.github.dev"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: ".github.dev,127.0.0.1,localhost"
+      - key: EMAIL_HOST
+        value: "smtp.gmail.com"
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        value: "eventopia959@gmail.com"
+      - key: EMAIL_HOST_PASSWORD
+        value: "twej dlkb yado pbmj"
+      - key: DEFAULT_FROM_EMAIL
+        value: "ToolNest eventopia959@gmail.com"
+      - key: REDIS_URL
+        fromService:
+          name: toolnest-redis
+          property: connectionString
+
+  - type: worker
+    name: celery-worker
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A toolnest_backend worker --loglevel=info
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: USE_SQLITE
+        value: "False"
+      - key: DB_NAME
+        value: "postgres"
+      - key: DB_USER
+        value: "postgres.utxduutcqrkqfxwgsxpk"
+      - key: DB_PASSWORD
+        value: "Jatin#7525"
+      - key: DB_HOST
+        value: "aws-0-ap-south-1.pooler.supabase.com"
+      - key: DB_PORT
+        value: "6543"
+      - key: PUBLIC_SWAGGER_URL
+        value: "https://potential-guacamole-9pqg56j5jw439x9j-8000.app.github.dev"
+      - key: CORS_ALLOWED_ORIGIN
+        value: "https://potential-guacamole-9pqg56j5jw439x9j-8000.app.github.dev"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: ".github.dev,127.0.0.1,localhost"
+      - key: EMAIL_HOST
+        value: "smtp.gmail.com"
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        value: "eventopia959@gmail.com"
+      - key: EMAIL_HOST_PASSWORD
+        value: "twej dlkb yado pbmj"
+      - key: DEFAULT_FROM_EMAIL
+        value: "ToolNest eventopia959@gmail.com"
+      - key: REDIS_URL
+        fromService:
+          name: toolnest-redis
+          property: connectionString
+
+  - type: redis
+    name: toolnest-redis
+    plan: free

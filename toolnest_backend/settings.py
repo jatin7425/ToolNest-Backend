@@ -12,8 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
-
-import psycopg2
+import dj_database_url
 from decouple import Csv, config
 from dotenv import load_dotenv
 
@@ -57,6 +56,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -124,6 +124,7 @@ SWAGGER_USE_COMPAT_RENDERERS = False
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 USE_SQLITE = config("USE_SQLITE", cast=bool, default=False)
+USE_PROD_DB = config("USE_PROD_DB", default=False, cast=bool)
 
 if USE_SQLITE:
     DATABASES = {
@@ -196,6 +197,10 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
 
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BROKER_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
