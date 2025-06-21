@@ -18,6 +18,8 @@ class TaskModel(models.Model):
     priority = models.CharField(
         max_length=10, choices=PRIORITY_CHOICES, default="medium"
     )
+    smart_priority = models.BooleanField(default=False)
+    postponed_count = models.PositiveIntegerField(default=0)
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
