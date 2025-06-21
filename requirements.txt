@@ -1,11 +1,13 @@
 black>=25.1.0
 celery>=5.5.3
+dj-database-url>=3.0.0
 dj-rest-auth>=4.0
 Django>=5.2.3
 django-allauth>=0.61.1
 django-cors-headers>=4.7.0
 djangorestframework>=3.15
 drf-yasg>=1.21.10
+gunicorn>=23.0.0
 mysqlclient>=2.2.4
 pre-commit>=4.2.0
 psycopg2-binary>=2.9.10
