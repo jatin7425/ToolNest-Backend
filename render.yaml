@@ -42,6 +42,7 @@ services:
         value: "ToolNest eventopia959@gmail.com"
       - key: REDIS_URL
         fromService:
+          type: redis
           name: toolnest-redis
           property: connectionString
 
@@ -86,6 +87,7 @@ services:
         value: "ToolNest eventopia959@gmail.com"
       - key: REDIS_URL
         fromService:
+          type: redis
           name: toolnest-redis
           property: connectionString
 
