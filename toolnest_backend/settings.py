@@ -22,6 +22,7 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+ENVIRONMENT = config("ENVIRONMENT", default="dev")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -124,7 +125,8 @@ SWAGGER_USE_COMPAT_RENDERERS = False
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 USE_SQLITE = config("USE_SQLITE", cast=bool, default=False)
-USE_PROD_DB = config("USE_PROD_DB", default=False, cast=bool)
+if ENVIRONMENT == "prod":
+    USE_SQLITE = False
 
 if USE_SQLITE:
     DATABASES = {
