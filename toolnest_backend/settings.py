@@ -98,6 +98,7 @@ SWAGGER_SETTINGS = {
             "description": "Token-based auth. Use 'Token <token>' (e.g. 'Token abcd1234')",
         }
     },
+    "DEFAULT_INFO": "toolnest_backend.urls.schema_view",
 }
 
 
