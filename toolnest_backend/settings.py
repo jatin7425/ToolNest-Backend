@@ -31,10 +31,16 @@ ENVIRONMENT = config("ENVIRONMENT", default="dev")
 SECRET_KEY = "django-insecure-sn7t_c67j!t38hgfwxh+r(mtgn^$s6=335aol$pnbj!$v$^kv#"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG")
+CORS_ALLOW_CREDENTIALS = True
 
-ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", cast=Csv())
-CORS_ALLOWED_ORIGINS = [config("CORS_ALLOWED_ORIGIN")]
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = [host for host in config("CORS_ALLOWED_ORIGIN").split(",")]
+
+
+ALLOWED_HOSTS = [host for host in config("DJANGO_ALLOWED_HOSTS").split(",")]
 
 AUTH_USER_MODEL = "auths.CustomUser"
 
